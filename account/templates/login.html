@@ -1,0 +1,9 @@
+{% extends "_base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <input type="submit" value="登入">
+    </form>
+{% endblock content %}

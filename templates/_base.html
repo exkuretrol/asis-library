@@ -30,22 +30,24 @@
                     {% endif %}
                 </a>
                 <ul class="ml-auto flex">
-                    <li>
-                        <a href="{% url 'admin:index' %}" class="ml-auto nav-link">管理</a>
-                    </li>
+                    {% if user.is_superuser %}
+                        <li>
+                            <a href="{% url 'admin:index' %}" class="ml-auto nav-link">管理</a>
+                        </li>
+                    {% endif %}
                     {% if user.is_authenticated %}
                         <li>
                             <a href="">* 你好 {{ user.username }} ! *</a>
                         </li>
                         <li>
-                            <form action="" method="post">
+                            <form action="{% url 'logout' %}" method="post">
                                 {% csrf_token %}
                                 <input type="submit" value="- 登出 -">
                             </form>
                         </li>
                     {% else %}
                         <li>
-                            <a href="">+ 登入 +</a>
+                            <a href="{% url 'login' %}">+ 登入 +</a>
                         </li>
                     {% endif %}
                     {% block nav %}
