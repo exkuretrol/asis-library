@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="keywords" content="django, postgresql">
+        <title>
+            {% block title %}
+                {% if title %}
+                    {{ title }}
+                {% else %}
+                    ASIS Library
+                {% endif %}
+            {% endblock title %}
+        </title>
+        <link rel="stylesheet" href="{% static 'css/output.css' %}">
+        {% block head %}
+        {% endblock head %}
+    </head>
+    {% block body %}
+        <body>
+            <nav class="flex flex-row">
+                <a href="{% url 'home' %}" class="navbar-brand">
+                    {% if title %}
+                        {{ title }}
+                    {% else %}
+                        Django Project
+                    {% endif %}
+                </a>
+                <ul class="ml-auto flex">
+                    <li>
+                        <a href="{% url 'admin:index' %}" class="ml-auto nav-link">管理</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                        <li>
+                            <a href="">* 你好 {{ user.username }} ! *</a>
+                        </li>
+                        <li>
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                <input type="submit" value="- 登出 -">
+                            </form>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href="">+ 登入 +</a>
+                        </li>
+                    {% endif %}
+                    {% block nav %}
+                    {% endblock nav %}
+                </ul>
+            </nav>
+            <div>
+                {% block content %}
+                {% endblock content %}
+            </div>
+        </body>
+    {% endblock body %}
+</html>
