@@ -54,7 +54,10 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "crispy_forms",
     "crispy_tailwind",
+    "easyaudit",
     # local apps
+    "account",
+    "book",
     # django override templates
     "django.forms",
 ]
@@ -69,6 +72,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # 3rd party
     "debug_toolbar.middleware.DebugToolbarMiddleware",
+    "easyaudit.middleware.easyaudit.EasyAuditMiddleware",
 ]
 
 ROOT_URLCONF = "django_project.urls"
@@ -126,6 +130,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = "account.CustomUser"
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
@@ -149,3 +154,13 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# django easy audit
+# https://django-easy-audit.readthedocs.io/en/latest/
+DJANGO_EASY_AUDIT_WATCH_MODEL_EVENTS = False
+DJANGO_EASY_AUDIT_WATCH_AUTH_EVENTS = False
+DJANGO_EASY_AUDIT_WATCH_REQUEST_EVENTS = False
+
+DJANGO_EASY_AUDIT_UNREGISTERED_CLASSES_EXTRA = []
+DJANGO_EASY_AUDIT_REGISTERED_CLASSES = []

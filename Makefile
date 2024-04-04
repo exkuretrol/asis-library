@@ -15,7 +15,8 @@ test:
 	@python manage.py test
 
 makemigrations:
-	@python manage.py makemigrations accounts
+	@python manage.py makemigrations account
+	@python manage.py makemigrations book
 
 migrate:
 	@python manage.py migrate
