@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
-        <meta name="keywords" content="django, postgresql">
+        <meta name="keywords" content="django, postgresql, library">
         <title>
             {% block title %}
                 {% if title %}
@@ -22,7 +22,7 @@
     {% block body %}
         <body>
             <nav class="flex flex-row">
-                <a href="{% url 'home' %}" class="navbar-brand">
+                <a href="{% url 'home' %}">
                     {% if title %}
                         {{ title }}
                     {% else %}
