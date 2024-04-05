@@ -27,6 +27,11 @@ collectstatic:
 shell:
 	@python manage.py shell
 
+import:
+	@python manage.py init_group
+	@python manage.py import_user --csv login_data.csv --type staff
+	@python manage.py import_user --csv reader.csv --type reader
+
 clean:
 	@find . -type f -name ".DS_Store" -execdir rm -rf {} \;
 	@find . -type d -name "migrations" -execdir rm -rf {} \;
