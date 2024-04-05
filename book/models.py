@@ -10,6 +10,14 @@ from django.utils.translation import gettext_lazy as _
 class Author(models.Model):
     no = models.BigAutoField(verbose_name=_("編號"), primary_key=True)
     name = models.CharField(verbose_name=_("姓名"), max_length=255)
+    related_user = models.OneToOneField(
+        verbose_name=_("關聯使用者"),
+        to=get_user_model(),
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        default=None,
+    )
 
     def __str__(self):
         return self.name
@@ -18,6 +26,14 @@ class Author(models.Model):
 class Advisor(models.Model):
     no = models.BigAutoField(verbose_name=_("編號"), primary_key=True)
     name = models.CharField(verbose_name=_("姓名"), max_length=255)
+    related_user = models.OneToOneField(
+        verbose_name=_("關聯使用者"),
+        to=get_user_model(),
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        default=None,
+    )
 
     def __str__(self):
         return self.name
@@ -51,14 +67,6 @@ class Book(models.Model):
         choices=LanguageChoices.choices,
         default=LanguageChoices.Chinese,
     )
-    thesis = models.OneToOneField(
-        verbose_name=_("論文"),
-        to="Thesis",
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-        default=None,
-    )
 
     def __str__(self):
         return self.no + " - " + self.title
@@ -79,6 +87,11 @@ class DegreeChoices(models.IntegerChoices):
 
 class Thesis(models.Model):
     no = models.BigAutoField(verbose_name=_("編號"), primary_key=True)
+    book_no = models.OneToOneField(
+        verbose_name=_("書籍編號"),
+        to=Book,
+        on_delete=models.CASCADE,
+    )
     advisor = models.ManyToManyField(verbose_name=_("指導教授"), to=Advisor, blank=True)
     keywords = models.ManyToManyField(verbose_name=_("關鍵字"), to=Keyword, blank=True)
     degree = models.SmallIntegerField(
@@ -90,7 +103,7 @@ class Thesis(models.Model):
     @property
     def graduated_year(self):
         try:
-            return self.book.published_date.year - 1911
+            return self.book_no.published_date.year - 1911
         except:
             return f"{self.no} does not have a related book."
 
@@ -99,7 +112,7 @@ class Thesis(models.Model):
     @property
     def title(self):
         try:
-            return f"{self.book.title}"
+            return f"{self.book_no.title}"
         except:
             return f"{self.no} does not have a related book."
 
@@ -128,6 +141,19 @@ class Copy(models.Model):
         verbose_name=_("狀態"),
         choices=StatusChoices.choices,
         default=StatusChoices.Lendable,
+    )
+    create_datetime = models.DateTimeField(
+        verbose_name=_("建立時間"), auto_now_add=True
+    )
+    update_datetime = models.DateTimeField(
+        verbose_name=_("上次更新時間"), auto_now=True
+    )
+    mantainer = models.ForeignKey(
+        verbose_name=_("維護者"),
+        to=get_user_model(),
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
     )
 
     def __str__(self):
