@@ -126,9 +126,10 @@ class Thesis(models.Model):
 
 
 class StatusChoices(models.IntegerChoices):
-    Lendable = 1, _("可借")
+    NotLendable = 0, _("不可出借")
+    Lendable = 1, _("可出借")
     Lend = 2, _("已借出")
-    Lost = 9, _("遺失")
+    Lost = 9, _("已遺失")
 
 
 class Copy(models.Model):
@@ -148,7 +149,7 @@ class Copy(models.Model):
     update_datetime = models.DateTimeField(
         verbose_name=_("上次更新時間"), auto_now=True
     )
-    mantainer = models.ForeignKey(
+    maintainer = models.ForeignKey(
         verbose_name=_("維護者"),
         to=get_user_model(),
         on_delete=models.SET_NULL,
