@@ -14,9 +14,4 @@ from .models import CustomUser
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
     list_display = ["username", "full_name", "email", "is_staff"]
-    search_fields = ["username", "query_full_name"]
-
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        qs = qs.annotate(query_full_name=Concat("last_name", "first_name"))
-        return qs
+    search_fields = ["username", "full_name"]
