@@ -1,0 +1,23 @@
+{% extends "_base.html" %}
+{% load helper %}
+{% block content %}
+    <ul>
+        <li>論文標題：{{ book.title }}</li>
+        <li>
+            指導老師：
+            {% include "include/book_thesis_advisor.html" with advisors=book.thesis.advisor.all %}
+        </li>
+        <li>
+            作者：
+            {% include "include/book_author.html" with authors=book.author.all %}
+        </li>
+        <li>論文出版日：{{ book.published_date }}</li>
+        <li>畢業學年度：{{ book.thesis.graduated_year }}</li>
+        <li>
+            關鍵詞：
+            {% include "include/book_thesis_keyword.html" with keywords=book.thesis.keywords.all %}
+        </li>
+    </ul>
+    {% is_current_thesis_advisor user book.thesis as is_thesis_advisor %}
+    {% if is_thesis_advisor %}<input type="button" value="編輯">{% endif %}
+{% endblock content %}

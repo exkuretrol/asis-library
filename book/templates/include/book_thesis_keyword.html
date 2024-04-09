@@ -1,0 +1,5 @@
+{% for keyword in keywords %}
+    <a href="{% url 'book_list' %}?thesis_keyword={{ keyword }}"
+       target="_blank">{{ keyword }}</a>
+    {% if not forloop.last %}、{% endif %}
+{% endfor %}

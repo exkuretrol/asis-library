@@ -1,0 +1,4 @@
+{% for author in authors %}
+    <a href="{% url 'book_list' %}?author={{ author.pk }}" target="_blank">{{ author }}</a>
+    {% if not forloop.last %}、{% endif %}
+{% endfor %}

@@ -1,0 +1,5 @@
+{% for advisor in advisors %}
+    <a href="{% url 'book_list' %}?thesis_advisor={{ advisor.pk }}"
+       target="_blank">{{ advisor }}</a>
+    {% if not forloop.last %}、{% endif %}
+{% endfor %}
