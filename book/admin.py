@@ -71,12 +71,12 @@ class GraduatedYearListFilter(admin.SimpleListFilter):
     def queryset(self, request, queryset):
         if self.value() is None:
             return queryset
-        return queryset.filter(book__published_date__year=self.value())
+        return queryset.filter(book_no__published_date__year=self.value())
 
 
 @admin.register(Thesis)
 class ThesisAdmin(admin.ModelAdmin):
-    list_display = ("no", "title", "graduated_year")
-    list_filter = ("advisor", GraduatedYearListFilter)
-    list_display_links = ("no", "title")
+    list_display = ("title", "graduated_year", "degree", "version")
+    list_filter = ("advisor", GraduatedYearListFilter, "degree", "version")
+    list_display_links = ("title",)
     search_fields = ("title",)

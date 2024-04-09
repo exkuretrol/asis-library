@@ -85,6 +85,11 @@ class DegreeChoices(models.IntegerChoices):
     Master = 2, _("碩士")
 
 
+class VersionChoices(models.IntegerChoices):
+    OralTest = 1, _("口試本")
+    Final = 2, _("最終版")
+
+
 class Thesis(models.Model):
     no = models.BigAutoField(verbose_name=_("編號"), primary_key=True)
     book_no = models.OneToOneField(
@@ -98,6 +103,11 @@ class Thesis(models.Model):
         verbose_name=_("學位"),
         choices=DegreeChoices.choices,
         default=DegreeChoices.Bachelor,
+    )
+    version = models.SmallIntegerField(
+        verbose_name=_("版本"),
+        choices=VersionChoices.choices,
+        default=VersionChoices.Final,
     )
 
     @property

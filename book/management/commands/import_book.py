@@ -15,16 +15,23 @@ from book.models import (
     LanguageChoices,
     StatusChoices,
     Thesis,
+    VersionChoices,
 )
 
 
 class Command(BaseCommand):
     def add_arguments(self, parser: CommandParser):
         parser.add_argument("--csv", type=str, help="CSV file path")
+        parser.add_argument(
+            "--empty", help="Empty", required=False, action="store_true"
+        )
 
     def handle(self, **options):
-        self.stdout.write("Importing users...")
+        if options["empty"] is True:
+            empty()
+            self.stdout.write("Emptied book, copy, and thesis tables.")
 
+        self.stdout.write("Importing users...")
         cmd_execute_path = Path().cwd()
         file_path = cmd_execute_path / options["csv"]
         parse_csv(self, file_path)
@@ -37,8 +44,6 @@ def empty():
 
 
 def parse_csv(self, file_path: Path):
-
-    empty()
 
     col_types = {
         "bookID": str,
@@ -56,8 +61,20 @@ def parse_csv(self, file_path: Path):
             cate = CategoryChoices.Thesis
             lang = LanguageChoices.Chinese
 
+            if "prefix" in row:
+                degree = DegreeChoices.Master
+                bookid = row["prefix"] + row["bookID"]
+                version = (
+                    VersionChoices.OralTest
+                    if row["prefix"] == "MTP"
+                    else VersionChoices.Final
+                )
+            else:
+                degree = DegreeChoices.Bachelor
+                bookid = row["bookID"]
+
             try:
-                book = Book.objects.get(no=row["bookID"])
+                book = Book.objects.get(no=bookid)
             except Book.DoesNotExist:
                 import re
 
@@ -65,7 +82,7 @@ def parse_csv(self, file_path: Path):
                 published_year = 1911 + int(result.groups()[0])
 
                 book = Book.objects.create(
-                    no=row["bookID"],
+                    no=bookid,
                     title=row["bookname"],
                     category=cate,
                     language=lang,
@@ -73,15 +90,15 @@ def parse_csv(self, file_path: Path):
                 )
                 book.save()
 
-            if cate == CategoryChoices.Thesis:
-                if "prefix" in row:
-                    degree = DegreeChoices.Master
-                else:
-                    degree = DegreeChoices.Bachelor
-                thesis, _ = Thesis.objects.get_or_create(
-                    book_no=book,
-                    degree=degree,
-                )
+            thesis_obj = {
+                "book_no": book,
+                "degree": degree,
+            }
+
+            if "prefix" in row:
+                thesis_obj.update({"version": version})
+
+            thesis, _ = Thesis.objects.get_or_create(**thesis_obj)
 
             status = (
                 StatusChoices.Lendable
