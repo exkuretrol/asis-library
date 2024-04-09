@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     # local apps
     "account",
     "book",
+    "autocomplete",
     # django override templates
     "django.forms",
 ]
