@@ -1,0 +1,10 @@
+{% extends "_base.html" %}
+{% load helper %}
+{% block content %}
+    {{ user }}
+    {% if user|is_advisor %}
+        {% include "include/profile_advisor.html" %}
+    {% elif user|is_reader %}
+        {% include "include/profile_reader.html" %}
+    {% endif %}
+{% endblock content %}

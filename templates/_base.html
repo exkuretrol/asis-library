@@ -15,6 +15,7 @@
                 {% endif %}
             {% endblock title %}
         </title>
+        <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
         <link rel="stylesheet" href="{% static 'css/output.css' %}">
         {% block head %}
         {% endblock head %}
@@ -37,7 +38,7 @@
                     {% endif %}
                     {% if user.is_authenticated %}
                         <li>
-                            <a href="">* 你好 {{ user.username }} ! *</a>
+                            <a href="{% url 'profile' %}">* 你好 {{ user.username }} ! *</a>
                         </li>
                         <li>
                             <form action="{% url 'logout' %}" method="post">
